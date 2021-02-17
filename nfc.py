@@ -58,21 +58,21 @@ class UsbDeviceFinder:
 
     @classmethod
     def find(cls):
-        logger = logging.getLogger(__name__)
-        logger.info("Looking for supported device...")
+        LOG.info("Looking for supported device...")
 
         device = usb.core.find(custom_match=cls._dev_matcher)
         if device is None:
             raise Exception("Cannot find BCM device - check list of supported devices")
-        logger.info("Found {:04X}:{:04X}".format(device.idVendor, device.idProduct))
+        LOG.info("Found {:04X}:{:04X}".format(device.idVendor, device.idProduct))
 
         handler = cls._cls_matcher(device)
-        logger.info("Handler {} ({})".format(handler.__class__.__name__, handler.NAME))
+        LOG.info("Handler {} ({})".format(handler.__class__.__name__, handler.NAME))
         return handler
 
 
 logging.basicConfig(level=logging.DEBUG)
-LOG = logging.getLogger(__name__)
+global LOG
+LOG = logging.getLOG(__name__)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
