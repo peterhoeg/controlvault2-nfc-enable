@@ -71,10 +71,10 @@ class UsbDeviceFinder:
         return handler
 
 
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
-    logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
+LOG = logging.getLogger(__name__)
 
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Control the NFC module in ControlVault 2/3."
     )
@@ -82,7 +82,11 @@ if __name__ == "__main__":
         "command", nargs="?", help="command to execute", choices=["on", "off", "reset"]
     )
     parser.add_argument(
-        "-v", "--verbose", action="count", help="verbosity level. Can be repeated."
+        "-v",
+        "--verbose",
+        action="count",
+        default=0,
+        help="increase verbosity level. Can be repeated.",
     )
 
     args = parser.parse_args()
@@ -91,22 +95,22 @@ if __name__ == "__main__":
         parser.error("No command specified")
 
     if args.verbose == 0:
-        logger.setLevel(logging.INFO)
+        LOG.setLevel(logging.INFO)
     elif args.verbose == 1:
-        logger.setLevel(logging.DEBUG)
+        LOG.setLevel(logging.DEBUG)
     elif args.verbose >= 2:
-        logger.setLevel(logging.TRACE)
+        LOG.setLevel(logging.TRACE)
 
     handler = UsbDeviceFinder.find()
     if args.command == "on":
-        logger.info("Turning NFC on...")
+        LOG.info("Turning NFC on...")
         handler.turn_on()
-        logger.info("NFC should be turned on now!")
+        LOG.info("NFC should be turned on now!")
     elif args.command == "off":
-        logger.info("Turning NFC off...")
+        LOG.info("Turning NFC off...")
         handler.turn_off()
-        logger.info("NFC should be turned off now!")
+        LOG.info("NFC should be turned off now!")
     elif args.command == "reset":
-        logger.info("Resetting device...")
+        LOG.info("Resetting device...")
         handler.reset()
-        logger.info("NFC device has been reset!")
+        LOG.info("NFC device has been reset!")
